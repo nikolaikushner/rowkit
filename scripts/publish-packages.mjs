@@ -35,8 +35,12 @@ function isPublished(name, version) {
  * publishing depends on.
  */
 function dropEmptyAuthToken() {
+  // setup-node writes `_authToken=${NODE_AUTH_TOKEN}` whenever registry-url is
+  // set. An empty token counts as "auth is configured", so npm never starts
+  // the trusted-publisher exchange and publish fails with ENEEDAUTH.
+  delete process.env.NODE_AUTH_TOKEN
   const userconfig = process.env.NPM_CONFIG_USERCONFIG
-  if (!userconfig || process.env.NODE_AUTH_TOKEN) return
+  if (!userconfig) return
   let text
   try {
     text = readFileSync(userconfig, 'utf8')
@@ -45,9 +49,12 @@ function dropEmptyAuthToken() {
   }
   const next = text
     .split('\n')
-    .filter((line) => !line.includes('_authToken=${NODE_AUTH_TOKEN}'))
+    .filter((line) => !line.includes('_authToken'))
     .join('\n')
-  if (next !== text) writeFileSync(userconfig, next)
+  if (next !== text) {
+    writeFileSync(userconfig, next)
+    console.log(`removed _authToken from ${userconfig}`)
+  }
 }
 
 function tagExists(tag) {
