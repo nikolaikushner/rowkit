@@ -4,8 +4,9 @@
  * pnpm 11 publishes natively and no longer shells out to npm. That path does
  * not pick up npm's OIDC trusted publishing, and `pnpm publish --json` still
  * exits 0, so `changeset publish` records a release that never reached the
- * registry. `pnpm pack` still rewrites `workspace:` ranges. `npm publish` of
- * that tarball is what actually authenticates.
+ * registry. `pnpm pack` still rewrites `workspace:` ranges. The tarball is
+ * unpacked and `npm publish` runs inside that package: from the private repo
+ * root, npm never starts the trusted-publisher exchange.
  */
 import { execFileSync } from 'node:child_process'
 import { mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
@@ -90,16 +91,25 @@ try {
       .split('\n')
       .at(-1)
     const tarball = packed?.startsWith('/') ? packed : join(dest, packed ?? '')
+    const unpacked = mkdtempSync(join(tmpdir(), 'rowkit-unpacked-'))
+    try {
+      execFileSync('tar', ['-xzf', tarball, '-C', unpacked])
 
-    // A prerelease goes out under its own dist-tag (`1.0.0-beta.0` → `beta`),
-    // so `latest` keeps pointing at the last stable release. npm refuses to
-    // publish a prerelease without an explicit tag anyway.
-    const prerelease = /-([a-z]+)/i.exec(pkg.version)?.[1]
-    const tag = prerelease ? ['--tag', prerelease] : []
-    execFileSync('npm', ['publish', tarball, '--access', 'public', '--provenance', ...tag], {
-      cwd: root,
-      stdio: 'inherit',
-    })
+      // A prerelease goes out under its own dist-tag (`1.0.0-beta.0` → `beta`),
+      // so `latest` keeps pointing at the last stable release. npm refuses to
+      // publish a prerelease without an explicit tag anyway.
+      const prerelease = /-([a-z]+)/i.exec(pkg.version)?.[1]
+      const tag = prerelease ? ['--tag', prerelease] : []
+      console.log(
+        `publishing ${label} from the packed package (oidc ${process.env.ACTIONS_ID_TOKEN_REQUEST_URL ? 'on' : 'off'})`,
+      )
+      execFileSync('npm', ['publish', '--access', 'public', '--provenance', ...tag], {
+        cwd: join(unpacked, 'package'),
+        stdio: 'inherit',
+      })
+    } finally {
+      rmSync(unpacked, { recursive: true, force: true })
+    }
 
     if (!tagExists(label)) {
       execFileSync('git', ['tag', label], { cwd: root, stdio: 'inherit' })
