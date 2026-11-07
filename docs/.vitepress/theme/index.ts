@@ -13,10 +13,6 @@ import TokenTable from './components/TokenTable.vue'
 import ThemeBuilder from './components/ThemeBuilder.vue'
 import ThemesSideBySide from './components/ThemesSideBySide.vue'
 import TypeSamples from './components/TypeSamples.vue'
-// The Windows 98 faces, loaded the way an app is told to load them.
-import '@fontsource/pt-sans/400.css'
-import '@fontsource/pt-sans/700.css'
-import '@fontsource/vt323/400.css'
 import './tokens.css'
 
 /**

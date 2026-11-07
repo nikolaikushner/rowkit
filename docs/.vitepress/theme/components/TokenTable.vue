@@ -7,7 +7,7 @@ import { useCopyToken } from './useCopyToken'
 /**
  * Every token a theme sets, from `@rowkit/tokens/reference`: the variable,
  * what it is for — the comment beside its value in the source — and its value
- * in Windows 98 and the modern theme's two schemes. Nothing here is written
+ * in the light scheme and the dark scheme. Nothing here is written
  * by hand, so it cannot go stale.
  *
  * With `searchable`, a search box and filters by kind and by component, for
@@ -48,8 +48,8 @@ const rows = computed(() => {
   })
 })
 
-const LOOKS = ['win98', 'modernLight', 'modernDark'] as const
-const LOOK_NAMES = { win98: 'Windows 98', modernLight: 'Modern light', modernDark: 'Modern dark' }
+const LOOKS = ['modernLight', 'modernDark'] as const
+const LOOK_NAMES = { modernLight: 'Light', modernDark: 'Dark' }
 
 /** `var(--color-vga-silver)` reads as `vga-silver`: the primitive it points at. */
 const short = (value: string) => value.replace(/^var\(--color-(.+)\)$/, '$1')
@@ -90,7 +90,7 @@ const { copied, copy } = useCopyToken()
           <tr>
             <th>Token</th>
             <th>What it is for</th>
-            <th>Windows 98 · modern light · dark</th>
+            <th>Light · dark</th>
           </tr>
         </thead>
         <tbody>

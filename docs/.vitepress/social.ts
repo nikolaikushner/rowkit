@@ -9,25 +9,12 @@ import type { HeadConfig, PageData, TransformContext } from 'vitepress'
  * DataTable is, rather than repeating the home page.
  */
 export const origin = 'https://rowkit.dev'
-export const image = `${origin}/og-image.png`
 
-/** Head tags every page shares. */
+/** Head tags every page shares. The card image showed the removed theme, so a link preview is title and description until a new card exists. */
 export const sharedHead: HeadConfig[] = [
   ['meta', { property: 'og:type', content: 'website' }],
   ['meta', { property: 'og:site_name', content: 'rowkit' }],
-  ['meta', { property: 'og:image', content: image }],
-  ['meta', { property: 'og:image:width', content: '1200' }],
-  ['meta', { property: 'og:image:height', content: '630' }],
-  [
-    'meta',
-    {
-      property: 'og:image:alt',
-      content:
-        'The rowkit logo, «Vue 3 components for product interfaces», and a Users table in Windows 98, modern light and modern dark.',
-    },
-  ],
-  ['meta', { name: 'twitter:card', content: 'summary_large_image' }],
-  ['meta', { name: 'twitter:image', content: image }],
+  ['meta', { name: 'twitter:card', content: 'summary' }],
 ]
 
 /**

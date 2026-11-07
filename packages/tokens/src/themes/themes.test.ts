@@ -6,6 +6,8 @@ import {
   modernDarkVars,
   modernLightVars,
   modernPalette,
+  modernSize,
+  themeNames,
   win98Vars,
   type ThemeTokenName,
   type ThemeValues,
@@ -32,6 +34,15 @@ describe('themes', () => {
     expect(Object.keys(modernLightVars).sort()).toEqual(Object.keys(win98Vars).sort())
   })
 
+  it('a switch thumb travels exactly the room left inside its track', () => {
+    for (const scale of [size, modernSize]) {
+      const px = (name: keyof typeof size) => Number.parseFloat(scale[name])
+      const inner = px('switch-w') - 2 * px('switch-inset')
+      expect(px('switch-thumb') + px('switch-travel')).toBe(inner)
+      expect(px('switch-h')).toBe(px('switch-thumb') + 2 * px('switch-inset'))
+    }
+  })
+
   it('the dark scheme changes only what the light scheme declares', () => {
     for (const name of Object.keys(modernDarkVars))
       expect(Object.keys(modernLightVars)).toContain(name)
@@ -39,7 +50,6 @@ describe('themes', () => {
 
   // Themes nest because each one declares every value on its own element; see css.ts.
   it.each([
-    ['[data-theme="win98"]', win98Vars],
     ['[data-theme="modern"]', modernLightVars],
     ['[data-theme="modern"][data-color-scheme="dark"]', modernDarkVars],
   ] as const)('%s declares each of its values', (selector, values) => {
@@ -47,9 +57,14 @@ describe('themes', () => {
     for (const [name, value] of Object.entries(values)) expect(body).toContain(`${name}: ${value};`)
   })
 
-  it('follows the system to dark unless the scheme is fixed to light', () => {
+  it('does not ship a Windows 98 theme', () => {
+    expect(css).not.toContain('[data-theme="win98"]')
+    expect(themeNames).toEqual(['modern'])
+  })
+
+  it('follows the system to dark on the page itself, unless the scheme is fixed to light', () => {
     expect(css).toMatch(
-      /@media \(prefers-color-scheme: dark\) \{\s+\[data-theme="modern"\]:not\(\[data-color-scheme="light"\]\) \{\s+color-scheme: dark;/
+      /@media \(prefers-color-scheme: dark\) \{\s+:root:not\(\[data-color-scheme="light"\]\) \{\s+color-scheme: dark;/
     )
   })
 
@@ -90,9 +105,10 @@ describe('defineTheme', () => {
     expect(acme.slice(acme.indexOf('@media'))).toContain('--color-control-primary: #7c66ff;')
   })
 
-  it('has no dark scheme when built on Windows 98 without one, or when asked', () => {
-    expect(defineTheme({ name: 'retro', extends: 'win98' })).not.toContain('color-scheme: dark')
+  it('has no dark scheme when asked, and refuses a theme rowkit does not ship', () => {
     expect(defineTheme({ name: 'flat', dark: false })).not.toContain('color-scheme: dark')
+    // @ts-expect-error -- Windows 98 is not a theme name anymore
+    expect(() => defineTheme({ name: 'retro', extends: 'win98' })).toThrow(/not a theme/)
   })
 
   it('refuses a token that does not exist, and a name that cannot be an attribute value', () => {

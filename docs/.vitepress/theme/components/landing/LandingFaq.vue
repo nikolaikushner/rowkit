@@ -3,8 +3,8 @@ import SectionHeading from './SectionHeading.vue'
 
 /**
  * «Before you install»: what a team asks before it adds a dependency. The
- * default theme is here on purpose — the site opens in modern, rowkit
- * without an attribute is Windows 98, and that surprises people.
+ * default look is here on purpose — a page with no attribute is the light
+ * scheme, and dark follows the system.
  *
  * An answer's `backticks` are code.
  */
@@ -27,7 +27,7 @@ const QUESTIONS = [
   },
   {
     q: 'Which theme do I get by default?',
-    a: 'Windows 98, with no attribute. Put `data-theme="modern"` on `<html>` for the modern look — light and dark — or define your own.',
+    a: 'The light scheme, with no attribute. Dark follows the system, or set `data-color-scheme="dark"` on `<html>`. A theme of your own is one `defineTheme()` call.',
   },
   {
     q: 'What is the licence?',

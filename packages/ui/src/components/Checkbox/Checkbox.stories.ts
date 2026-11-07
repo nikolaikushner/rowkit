@@ -59,7 +59,7 @@ export const InAGroupBox: Story = {
   }),
 }
 
-/** Tab reaches it, Space toggles it, and the dotted ring shows round the label. */
+/** Tab reaches it, Space toggles it, and the focus ring shows round the box. */
 export const Keyboard: Story = {
   render: () => ({
     components: { Checkbox },
@@ -72,8 +72,8 @@ export const Keyboard: Story = {
     await expect(box).toHaveFocus()
     await userEvent.keyboard(' ')
     await expect(box).toBeChecked()
-    const label = canvasElement.querySelector('[data-slot="checkbox-label"]')
-    if (!label) throw new Error('no label')
-    await expect(getComputedStyle(label).outlineStyle).toBe('dotted')
+    const frame = canvasElement.querySelector('[data-slot="checkbox-box"]')
+    if (!frame) throw new Error('no box')
+    await expect(Number.parseFloat(getComputedStyle(frame).outlineWidth)).toBeGreaterThan(0)
   },
 }

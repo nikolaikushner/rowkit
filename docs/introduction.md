@@ -48,7 +48,7 @@ in [`@rowkit/tokens`](https://github.com/NikolaiKushner/rowkit/tree/main/package
 which you can install on its own. Contrast pairings are asserted in that
 package's tests, not eyeballed. This site is styled from the same tokens.
 
-**Two themes, and yours.** rowkit ships Windows 98 and a modern theme in light
+**One theme, and yours.** rowkit ships a modern theme in light
 and dark, switched by one attribute — the components, their props and their
 markup do not change. Because the whole look is tokens, you can make it yours
 the same way: adjust a few values for your brand, or define a complete theme
@@ -111,7 +111,7 @@ and the working backlog are on [GitHub](https://github.com/NikolaiKushner/rowkit
   is the step people miss
 - [API conventions](/conventions) — the rules every component follows, decided
   once
-- [Themes](/foundations/themes) — switch between Windows 98 and modern, and
+- [Themes](/foundations/themes) — light and dark, and
   make a theme of your own
 - [Tokens](/foundations/tokens) — every colour, space and layer, rendered live
   from the package

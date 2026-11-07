@@ -19,7 +19,7 @@ import {
  * the same function, the same CSS an app would ship. The CSS is shown under
  * the preview, ready to copy.
  */
-type Base = 'modern' | 'win98'
+type Base = 'modern'
 type Density = 'compact' | 'regular' | 'roomy'
 type Face = 'system' | 'serif' | 'rounded' | 'mono'
 
@@ -71,13 +71,6 @@ const vars = computed<ThemeValues>(() => {
     '--radius-xl': `${String(Math.round(r * 1.7))}px`,
     '--font-sans': FACES[face.value],
   }
-  if (base.value === 'win98') {
-    // Windows 98's default button is the silver face with black text; with an
-    // accent it takes the accent and white text, and the title bar follows.
-    out['--color-control-primary-foreground'] = '#ffffff'
-    out['--color-titlebar-from'] = a
-    out['--color-titlebar-to'] = toward('white', 60)
-  }
   if (density.value !== 'regular') {
     const [xs, sm, md, lg, rowSm, rowMd] = DENSITY[density.value].map((n) => `${String(n)}px`)
     Object.assign(out, {
@@ -102,7 +95,7 @@ const css = computed(() =>
     extends: base.value,
     light: vars.value,
     // The accent carries into the dark scheme; the base supplies the rest of it.
-    dark: base.value === 'win98' ? false : vars.value,
+    dark: vars.value,
   })
 )
 
@@ -121,11 +114,9 @@ const source = computed(() => {
     '',
     'export const css = defineTheme({',
     `  name: '${NAME}',`,
-    `  extends: '${base.value}',`,
+    `  extends: 'modern',`,
     '  light: values,',
-    base.value === 'win98'
-      ? '  dark: false,'
-      : '  dark: values, // the accent carries into the dark scheme',
+    '  dark: values, // the accent carries into the dark scheme',
     '})',
   ].join('\n')
 })
@@ -145,10 +136,6 @@ const ThemeStyle: FunctionalComponent<{ css: string }> = (props) =>
   h('style', { innerHTML: props.css })
 
 const options = <T extends string>(values: readonly (readonly [T, string])[]) => values
-const BASES = options<Base>([
-  ['modern', 'Modern'],
-  ['win98', 'Windows 98'],
-])
 const SCHEMES = options<'light' | 'dark'>([
   ['light', 'Light'],
   ['dark', 'Dark'],
@@ -175,20 +162,6 @@ const updates = ref(true)
 
     <div class="grid gap-x-6 gap-y-3 text-ui sm:grid-cols-2">
       <div class="flex flex-col gap-1">
-        <span id="tb-base" class="font-strong">Start from</span>
-        <ButtonGroup aria-labelledby="tb-base">
-          <Button
-            v-for="[value, label] in BASES"
-            :key="value"
-            size="sm"
-            variant="secondary"
-            :pressed="base === value"
-            @click="base = value"
-            >{{ label }}</Button
-          >
-        </ButtonGroup>
-      </div>
-      <div v-if="base === 'modern'" class="flex flex-col gap-1">
         <span id="tb-scheme" class="font-strong">Scheme</span>
         <ButtonGroup aria-labelledby="tb-scheme">
           <Button

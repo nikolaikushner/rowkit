@@ -16,19 +16,19 @@ Last reviewed: **2026-10-08** (1.0.0-beta.1).
 
 ## Where rowkit is today
 
-Twenty-one components, published as `rowkit` in the 1.0 beta (npm `beta` tag),
+Twenty-two components, published as `rowkit` in the 1.0 beta (npm `beta` tag),
 with tokens split into `@rowkit/tokens`:
 
 | Area        | Components                                                                         |
 | ----------- | ---------------------------------------------------------------------------------- |
-| Foundations | Button, ButtonGroup, Field, Input, Select, Checkbox, Radio, Badge, Separator        |
+| Foundations | Button, ButtonGroup, Field, Input, Select, Checkbox, Radio, Switch, Badge, Separator |
 | Data        | DataTable, Pagination, FilterBar, EmptyState, Skeleton, ProgressBar                 |
 | Overlays    | Dialog, Toast, Tooltip                                                             |
 | Layout      | Window, GroupBox, StatusBar, ScrollArea                                            |
 
-Two themes from one set of components: **Windows 98**, the default, and
-**modern**, light and dark. Both follow the designer's Figma file. A theme is
-token values only, so `defineTheme()` makes a third one in a single call.
+One theme, light and dark, following the designer's Figma file. A theme is
+token values only, so `defineTheme()` makes another in a single call. The
+Windows 98 theme is not shipped.
 
 The engineering baseline is healthy and should stay that way — these are gates
 in CI, not aspirations:
@@ -79,12 +79,11 @@ Everything in **Now** serves that, or clears something out of its way.
 
 Ordered. Finish or deliberately drop an item before starting the next.
 
-### 1. Which theme is the default
+### 1. Which theme is the default — decided
 
-The plan was to make the modern theme the default and Windows 98 the second
-theme (`data-theme="win98"`), in its own minor release. Decide it now that both
-are finished: it changes what every consumer without the attribute sees, so
-it is a breaking change with a changeset, not a token edit.
+Windows 98 is not shipped. A page with no attribute is the remaining theme,
+light and dark. `data-theme="win98"` does nothing. That is a breaking change
+and needs the changeset that says so.
 
 ### 2. A theme made by the consumer's coding agent
 
@@ -145,8 +144,9 @@ A product interface is built from more than a table. This is the set to grow
 into. Nothing here is being built until the items under **Now** are finished
 or deliberately dropped.
 
-- **The designer's next wave**: Switch, a menu, Tabs, Combobox, and the
-  dialog's alert layout as a style switch.
+- **Switch** is in (no frame in the Figma file yet — the sizes are tokens).
+  Still to draw and build: a menu, Tabs, Combobox, and the dialog's alert
+  layout as a style switch.
 - **Menus and overlays.** DropdownMenu (row actions currently force a one-off
   icon menu), Popover, Sheet / drawer, and a confirm dialog.
 - **Dates.** Date and date-range pickers.
@@ -187,13 +187,12 @@ is the application's job.
 
 Settled for now. Revisit one when it gets in the way of a component or the design, with a reason:
 
-- **Two themes by attribute.** `data-theme="win98" | "modern"` on any element,
-  Windows 98 by default; themes nest. Windows 98 has one light scheme; the
-  modern theme has light and dark through `data-color-scheme`. No `dark:`
+- **One theme, light and dark.** No attribute is that theme. `data-color-scheme`
+  fixes the scheme; a theme of your own nests with `data-theme`. No `dark:`
   variant and no `.dark` class.
-- **The style, not the assets.** Windows 98 is drawn in its style, with no
-  Microsoft logos or original icons. Status is carried by an icon as well as a
-  colour. Consumers rebrand through tokens or a theme of their own.
+- **The style, not the assets.** No Microsoft logos or original icons. Status
+  is carried by an icon as well as a colour. Consumers rebrand through tokens
+  or a theme of their own.
 - **The brand stands above the themes.** The mark, the wordmark and the
   vermilion accent belong to no theme; each theme reads the mark its own way.
 - **npm package, not copy-paste distribution.** shadcn-vue's model is good and

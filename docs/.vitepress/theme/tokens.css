@@ -20,7 +20,8 @@
  * library cannot assume one theme per page.
  */
 @custom-variant modern (&:where([data-theme='modern'], [data-theme='modern'] *));
-@custom-variant win98 (&:where(:root:not([data-theme='modern']), :root:not([data-theme='modern']) *));
+/* Leftover `win98:` classes match only an explicit attribute. The library no longer paints that theme, and the site never sets the attribute. */
+@custom-variant win98 (&:where([data-theme='win98'], [data-theme='win98'] *));
 /* The modern theme in its dark scheme, chosen or from the system: for the brand's reversed marks. */
 @custom-variant modern-dark {
   &:where(

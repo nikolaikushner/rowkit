@@ -155,11 +155,11 @@ export const tokenDescriptions: Record<string, readonly [group: string, descript
     'color',
     'A latched default button. A toggle is never the default, but if one latches it keeps its colour.',
   ],
-  '--color-checked': ['color', 'The box of a checked checkbox or radio, and the mark inside it.'],
-  '--color-on-checked': [
+  '--color-checked': [
     'color',
-    'The box of a checked checkbox or radio, and the mark inside it.',
+    "The box of a checked checkbox or radio, and a switch's track while it is on.",
   ],
+  '--color-on-checked': ['color', 'The mark in a checked checkbox or option button.'],
   '--color-popover': ['color', "A list that drops from a trigger: a select's options."],
   '--color-popover-border': ['color', "A list that drops from a trigger: a select's options."],
   '--color-focus-ring': [
@@ -201,13 +201,17 @@ export const tokenDescriptions: Record<string, readonly [group: string, descript
     'color',
     'The channel a progress bar or a scroll thumb runs in, and what fills it.',
   ],
+  '--color-switch-thumb': [
+    'color',
+    "A switch's thumb: the control face in Windows 98, white in the modern theme.",
+  ],
   '--color-progress': [
     'color',
-    'The channel a progress bar or a scroll thumb runs in, and what fills it.',
+    "A switch's thumb: the control face in Windows 98, white in the modern theme.",
   ],
   '--color-scroll-thumb': [
     'color',
-    'The channel a progress bar or a scroll thumb runs in, and what fills it.',
+    "A switch's thumb: the control face in Windows 98, white in the modern theme.",
   ],
   '--color-scroll-track': ['color', "The channel a scroll bar's thumb runs in, under its pattern."],
   '--color-tooltip-border': ['color', 'The frame of a tooltip.'],
@@ -297,7 +301,7 @@ export const tokenDescriptions: Record<string, readonly [group: string, descript
   '--rk-shadow-titlebar': ['shadow', 'The edge between a title bar and the window under it.'],
   '--rk-shadow-checked': [
     'shadow',
-    'A checked check box: the same sunken well as an unchecked one, in Windows 98.',
+    "A checked check box, and a switch's track while on: the same sunken well as an unchecked one, in Windows 98.",
   ],
   '--rk-shadow-field-button-pressed': [
     'shadow',
@@ -412,11 +416,31 @@ export const tokenDescriptions: Record<string, readonly [group: string, descript
   '--spacing-radio': ['size', "The side of a checkbox's box, and of an option button."],
   '--spacing-check-gap': [
     'size',
-    "Between a check box or option button and its label, and the label's own inset (where the dotted ring sits).",
+    "Between a check box, option button or switch and its label, and the label's own inset (where the dotted ring sits).",
   ],
   '--spacing-check-label-px': [
     'size',
-    "Between a check box or option button and its label, and the label's own inset (where the dotted ring sits).",
+    "Between a check box, option button or switch and its label, and the label's own inset (where the dotted ring sits).",
+  ],
+  '--spacing-switch-h': [
+    'size',
+    "A switch's track: height, width, the thumb, the gap around the thumb, and how far the thumb travels.",
+  ],
+  '--spacing-switch-w': [
+    'size',
+    "A switch's track: height, width, the thumb, the gap around the thumb, and how far the thumb travels.",
+  ],
+  '--spacing-switch-thumb': [
+    'size',
+    "A switch's track: height, width, the thumb, the gap around the thumb, and how far the thumb travels.",
+  ],
+  '--spacing-switch-inset': [
+    'size',
+    "A switch's track: height, width, the thumb, the gap around the thumb, and how far the thumb travels.",
+  ],
+  '--spacing-switch-travel': [
+    'size',
+    'How far the thumb moves when the switch turns on. Width, minus the thumb, minus the inset on both sides — kept as its own length so the thumb can travel by a transform and stay on whole pixels.',
   ],
   '--spacing-titlebar': ['size', "A window's or a dialog's title bar."],
   '--spacing-caption-w': ['size', 'A caption button: minimise, maximise, close.'],

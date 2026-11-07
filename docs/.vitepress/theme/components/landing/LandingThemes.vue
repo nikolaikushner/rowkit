@@ -18,10 +18,9 @@ import CodeBlock from './CodeBlock.vue'
 import SectionHeading from './SectionHeading.vue'
 
 /**
- * «One set of components. Any look.»: one New user form three times, live —
- * in Windows 98, in modern, and in a theme `defineTheme()` writes from the
- * values in the sample under them. The sample is the call the third panel
- * runs, so what the page claims is what it does.
+ * «One set of components. Any look.»: one New user form twice, live — in the
+ * shipped theme, and in a theme `defineTheme()` writes from the values in the
+ * sample under them. The sample is the call the second panel runs.
  */
 const violet = {
   '--color-control-primary': '#5b3df5',
@@ -59,8 +58,7 @@ const ThemeStyle: FunctionalComponent<{ css: string }> = (props) =>
   h('style', { innerHTML: props.css })
 
 const PANELS = [
-  { theme: 'win98', name: 'Windows 98', note: 'data-theme="win98"' },
-  { theme: 'modern', name: 'Modern', note: 'data-theme="modern"' },
+  { theme: 'modern', name: 'rowkit', note: 'the shipped theme' },
   { theme: 'acme', name: 'Your theme', note: 'defineTheme()' },
 ] as const
 
@@ -73,11 +71,11 @@ const forms = ref(PANELS.map(() => ({ name: '', role: 'Administrator', invite: t
     <ThemeStyle :css="acme" />
     <div class="mx-auto flex max-w-[1200px] flex-col gap-12">
       <SectionHeading id="lp-themes" label="Themes" title="One set of components. Any look.">
-        A theme is token values and nothing else — the same markup, one attribute apart. Windows 98
-        and modern ship in the box; yours is one <code class="font-mono">defineTheme()</code> call.
+        A theme is token values and nothing else — the same markup. The shipped theme is light and
+        dark; yours is one <code class="font-mono">defineTheme()</code> call.
       </SectionHeading>
 
-      <div class="grid items-start gap-10 md:grid-cols-3 md:gap-6">
+      <div class="grid items-start gap-10 md:grid-cols-2 md:gap-6">
         <figure v-for="(panel, i) in PANELS" :key="panel.theme" class="m-0 flex flex-col gap-3">
           <figcaption class="flex items-baseline gap-2">
             <span class="text-[16px] leading-6 font-semibold text-foreground win98:font-bold">{{
@@ -87,7 +85,7 @@ const forms = ref(PANELS.map(() => ({ name: '', role: 'Administrator', invite: t
           </figcaption>
           <div
             :data-theme="panel.theme"
-            :data-color-scheme="panel.theme === 'win98' ? undefined : siteScheme"
+            :data-color-scheme="siteScheme"
             class="font-sans text-ui text-foreground"
           >
             <Window>

@@ -1,42 +1,15 @@
 import type { Preview } from '@storybook/vue3-vite'
 import { forScheme } from './theme'
-// The Windows 98 faces, loaded the way an app is told to load them.
-import '@fontsource/pt-sans/400.css'
-import '@fontsource/pt-sans/700.css'
-import '@fontsource/vt323/400.css'
 import './preview.css'
 
-type Theme = 'win98' | 'modern'
 type Scheme = 'system' | 'light' | 'dark'
 
 /**
- * The theme the stories open in. People browsing the workshop start in modern,
- * as rowkit.dev does. The browser tests (Vitest, mode `test`) and their a11y
- * gate start in Windows 98 — rowkit's own default, without an attribute — and
- * `VITE_RK_THEME` picks either explicitly (`test:a11y:modern`).
+ * Stories open in the modern theme, which is also what a page without an
+ * attribute draws. The scheme toolbar switches its light and dark.
  */
-const requested = import.meta.env.VITE_RK_THEME
-const initialTheme: Theme =
-  requested === 'modern' || requested === 'win98'
-    ? requested
-    : import.meta.env.MODE === 'test'
-      ? 'win98'
-      : 'modern'
-
 const preview: Preview = {
   globalTypes: {
-    theme: {
-      description: 'rowkit theme',
-      toolbar: {
-        title: 'Theme',
-        icon: 'paintbrush',
-        items: [
-          { value: 'win98', title: 'Windows 98' },
-          { value: 'modern', title: 'Modern' },
-        ],
-        dynamicTitle: true,
-      },
-    },
     scheme: {
       description: 'Colour scheme, for themes that have a dark one',
       toolbar: {
@@ -51,7 +24,7 @@ const preview: Preview = {
       },
     },
   },
-  initialGlobals: { theme: initialTheme, scheme: 'system' },
+  initialGlobals: { scheme: 'system' },
   parameters: {
     controls: { matchers: { color: /(background|color)$/i, date: /Date$/i } },
     docs: { theme: forScheme() },
@@ -71,7 +44,7 @@ const preview: Preview = {
       // The theme goes on <html>, as an app sets it, so overlays teleported to
       // <body> are themed too.
       const root = document.documentElement
-      root.dataset.theme = (context.globals.theme as Theme | undefined) ?? initialTheme
+      root.dataset.theme = 'modern'
       const scheme = (context.globals.scheme as Scheme | undefined) ?? 'system'
       if (scheme === 'system') delete root.dataset.colorScheme
       else root.dataset.colorScheme = scheme
