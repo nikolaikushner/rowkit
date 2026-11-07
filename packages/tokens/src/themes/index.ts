@@ -32,8 +32,8 @@ export {
 } from './modern'
 export type { ModernPaletteName } from './modern'
 
-/** The themes rowkit ships. `win98` is the default: what `:root` carries. */
-export const themeNames = ['win98', 'modern'] as const
+/** The theme rowkit ships. Modern is what `:root` carries; `data-theme="modern"` repeats it. */
+export const themeNames = ['modern'] as const
 export type ThemeName = (typeof themeNames)[number]
 
 /** A theme as the stylesheet declares it: custom property name → value. */
@@ -169,20 +169,24 @@ export function defineTheme(theme: ThemeDefinition): string {
   if (!/^[a-z][a-z0-9-]*$/.test(theme.name)) {
     throw new Error(`defineTheme: "${theme.name}" is not a theme name (lowercase, digits, dashes)`)
   }
-  const base = theme.extends ?? 'modern'
+  // Typed callers can only pass `modern`. This is for a call that is not type-checked.
+  const base: string | undefined = theme.extends
+  if (base !== undefined && base !== 'modern') {
+    throw new Error(`defineTheme: "${base}" is not a theme rowkit ships`)
+  }
   const unknown = [...Object.keys(theme.light ?? {}), ...Object.keys(theme.dark || {})].filter(
-    (name) => !(name in win98Vars)
+    (name) => !(name in modernLightVars)
   )
   if (unknown.length > 0) {
     throw new Error(`defineTheme: no rowkit token is called ${unknown.join(', ')}`)
   }
 
   const selector = `[data-theme="${theme.name}"]`
-  const light: ThemeVars = { ...(base === 'modern' ? modernLightVars : win98Vars), ...theme.light }
+  const light: ThemeVars = { ...modernLightVars, ...theme.light }
   const rules = [themeRule(selector, 'light', light)]
 
-  if (theme.dark !== false && (base === 'modern' || theme.dark !== undefined)) {
-    const dark: ThemeVars = { ...(base === 'modern' ? modernDarkVars : {}), ...theme.dark }
+  if (theme.dark !== false) {
+    const dark: ThemeVars = { ...modernDarkVars, ...theme.dark }
     rules.push(
       [
         '@media (prefers-color-scheme: dark) {',

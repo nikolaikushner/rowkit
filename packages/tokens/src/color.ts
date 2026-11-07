@@ -293,8 +293,9 @@ export const semanticColor = {
   'control-latched': ref('vga-silver'),
   /** A latched default button. A toggle is never the default, but if one latches it keeps its colour. */
   'control-primary-latched': ref('vga-silver'),
-  /** The box of a checked checkbox or radio, and the mark inside it. */
+  /** The box of a checked checkbox or radio, and a switch's track while it is on. */
   checked: ref('vga-white'),
+  /** The mark in a checked checkbox or option button. */
   'on-checked': ref('vga-black'),
   /** A list that drops from a trigger: a select's options. */
   popover: ref('vga-white'),
@@ -317,6 +318,8 @@ export const semanticColor = {
   'table-row-hover': ref('vga-white'),
   /** The channel a progress bar or a scroll thumb runs in, and what fills it. */
   track: ref('vga-silver'),
+  /** A switch's thumb: the control face in Windows 98, white in the modern theme. */
+  'switch-thumb': ref('vga-silver'),
   progress: ref('vga-navy'),
   'scroll-thumb': ref('vga-silver'),
   /** The channel a scroll bar's thumb runs in, under its pattern. */

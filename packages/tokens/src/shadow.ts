@@ -74,7 +74,7 @@ export const shadow = {
   statusbar: 'none',
   /** The edge between a title bar and the window under it. */
   titlebar: 'none',
-  /** A checked check box: the same sunken well as an unchecked one, in Windows 98. */
+  /** A checked check box, and a switch's track while on: the same sunken well as an unchecked one, in Windows 98. */
   checked: bevel([sh, hl], [dark, light]),
   /** A button inside a field while held, or while its list is open: pressed in, in Windows 98. */
   'field-button-pressed': bevel([dark, hl], [sh, light]),

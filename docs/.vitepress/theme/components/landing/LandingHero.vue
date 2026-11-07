@@ -33,7 +33,7 @@ import { SOURCE } from './links'
         class="max-w-[680px] text-[17px] leading-[26px] text-muted-foreground md:text-[20px] md:leading-[30px]"
       >
         A professional toolkit — typed, accessible, themeable. Tables, filters, forms and overlays
-        that agree with each other. Windows 98 and modern in the box; your own look in one call.
+        that agree with each other. Light and dark in the box; your own look in one call.
       </p>
       <div class="flex w-full flex-col gap-3 md:w-auto md:flex-row md:items-center">
         <InstallCommand class="md:w-[300px]" />

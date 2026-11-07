@@ -40,11 +40,7 @@ component, a change to an existing one, or the Windows 98 design.
   New surface belongs when a product interface is awkward without it. There is
   no fixed component count.
 
-**Visual direction:** two themes from one set of components — **Windows 98**, the default, and **modern** (a current desktop OS look, light and dark). A theme is token values only: see [`docs/foundations/themes.md`](./docs/foundations/themes.md).
-
-Windows 98: Grey `#C0C0C0` face, two-pixel bevels (raised, pressed, sunken), navy `#000080` selection and title-bar gradient, square corners, no soft shadows, no blur, next to no motion. PT Sans (OFL, Latin and Cyrillic, regular and bold; apps load the font, rowkit does not ship it). Controls follow Win98 sizes on desktop and grow to ≥ 24px touch targets on touch screens. Windows 98 has one light scheme; the modern theme has light and dark (`data-color-scheme`). The style, not the assets: no Microsoft logos, Windows flag or original system icons. Consumers still rebrand via tokens (`--color-primary-*`).
-
-Modern: white and grey surfaces, a blue accent, rounded corners, soft shadows, a focus ring, short transitions, the system font and the designer's outline icons; dark follows the system unless `data-color-scheme` fixes it.
+**Visual direction:** one theme, light and dark — a current desktop OS look. A theme is token values only: see [`docs/foundations/themes.md`](./docs/foundations/themes.md). White and grey surfaces, a blue accent, rounded corners, soft shadows, a focus ring, short transitions, the system font and the designer's outline icons. Dark follows the system unless `data-color-scheme` fixes it. Consumers rebrand via tokens (`--color-primary-*`). The Windows 98 theme is not shipped: `data-theme="win98"` does nothing.
 
 ## Stack
 
@@ -112,14 +108,14 @@ Settled for now. Revisit one when it gets in the way, with a reason — see "How
 - **The set is the professional toolkit.** Components are added until a product interface can be built from rowkit. There is no fixed count, and tables are one part of that set, not the boundary of it.
 - **MIT license.**
 - **Tokens as a separate package**, so they can be consumed without importing components.
-- **Two themes, by attribute.** `data-theme="win98" | "modern"` on any element (default Windows 98), `data-color-scheme` for the modern theme's dark. Each theme declares every value on its own element, so themes nest. No `dark:` variant and no `.dark` class.
-- **Both themes follow the designer's Figma file.** Where code and a frame disagree, the frame wins or the difference is agreed with the designer and noted on the file's Foundations page («Theme decisions»). The modern icons are the designer's outline glyphs, exported from the file's Icons page into `packages/ui/src/icons/modern/` and drawn over the pixel icons with CSS masks (`pnpm icons:modern`).
+- **One theme, light and dark.** Without an attribute a page is that theme. `data-color-scheme` fixes light or dark; `data-theme="modern"` repeats the same values so a region can nest inside a theme of your own. `data-theme="win98"` is not a theme. No `dark:` variant and no `.dark` class.
+- **The theme follows the designer's Figma file.** Where code and a frame disagree, the frame wins or the difference is agreed with the designer and noted on the file's Foundations page («Theme decisions»). The icons are the designer's outline glyphs, exported from the file's Icons page into `packages/ui/src/icons/modern/` and drawn with CSS masks (`pnpm icons:modern`).
 
 ## Commands
 
 ```bash
 pnpm build        # run first in a fresh clone; workspace deps resolve through dist
-pnpm test         # unit, component and browser tests (Windows 98)
+pnpm test         # unit, component and browser tests
 pnpm test:changed # only the tests that import what you changed
 pnpm lint         # eslint, type-aware; cached, so a re-run lints only changed files
 pnpm typecheck    # vue-tsc, strict
@@ -129,9 +125,9 @@ pnpm size         # bundle budget, brotli
 pnpm storybook    # then, in another terminal:
 pnpm visual:check # screenshot default stories → .visual-check/
 pnpm visual:check Button  # scoped to one component
-pnpm visual:check --theme modern  # the same in the modern theme (Windows 98 by default)
+pnpm visual:check --theme modern  # the same with the scheme toolbar's dark, when you need it
 
-pnpm test:a11y         # the browser tests and a11y gate (Windows 98)
+pnpm test:a11y         # the browser tests and a11y gate
 pnpm test:a11y:modern  # the same in the modern theme
 pnpm icons:modern     # regenerate the modern glyph CSS after changing src/icons/modern
 

@@ -1,12 +1,23 @@
-import { colorPrimitives, semanticColor } from './color'
+import { colorPrimitives } from './color'
 import { duration, easing } from './motion'
-import { radiusBase, radiusCss } from './radius'
+import { radius, radiusBase } from './radius'
 import { shadow, textShadow } from './shadow'
-import { size } from './size'
 import { spacing, spacingBase } from './spacing'
-import { style } from './style'
-import { modernDarkVars, modernLightVars, modernPalette, themeRule, win98Vars } from './themes'
-import { fontFamily, fontSize, fontWeight, letterSpacing, lineHeight } from './typography'
+import {
+  modernDarkVars,
+  modernFont,
+  modernFontSize,
+  modernFontWeight,
+  modernLightColor,
+  modernLightShadow,
+  modernLightVars,
+  modernPalette,
+  modernRadius,
+  modernSize,
+  modernStyle,
+  themeRule,
+} from './themes'
+import { fontSize, fontWeight, letterSpacing, lineHeight } from './typography'
 import { zIndex } from './z-index'
 
 /**
@@ -16,11 +27,10 @@ import { zIndex } from './z-index'
  * the stylesheet from them, so the two cannot drift. `css.test.ts` asserts that
  * every token in every scale reaches the output.
  *
- * Two themes. Windows 98 is the default, carried by `:root`; the modern theme
- * is switched on by `data-theme="modern"` on any element, and its dark scheme
- * by the system or by `data-color-scheme="dark"` on that same element. A theme
- * is a set of custom property values and nothing else, so themes nest: a
- * region marked `data-theme="win98"` inside a modern page is Windows 98.
+ * One theme. Modern is what `:root` carries, light by default; its dark scheme
+ * follows the system or `data-color-scheme` on the same element. `data-theme="modern"`
+ * declares the same values again, so a modern region can sit inside a theme of
+ * your own. A theme is a set of custom property values and nothing else.
  *
  * One thing makes that work, and it is easy to break. A custom property whose
  * value contains `var()` is resolved on the element that declares it, and
@@ -43,25 +53,25 @@ export function buildThemeCss(): string {
     section('colour primitives — the only literal colours in rowkit'),
     ...entries(colorPrimitives, (k) => `--color-${k}`),
     '',
-    section('semantic colours'),
-    ...entries(semanticColor, (k) => `--color-${k}`),
+    section('semantic colours — the modern theme, light'),
+    ...entries(modernLightColor, (k) => `--color-${k}`),
     '',
     section('spacing'),
     `  --spacing: ${spacingBase};`,
     ...entries(spacing, (k) => `--spacing-${k}`),
     '',
     section('component sizes — in the spacing namespace, so h-control-md and friends exist'),
-    ...entries(size, (k) => `--spacing-${k}`),
+    ...entries(modernSize, (k) => `--spacing-${k}`),
     '',
     section('typography'),
-    ...entries(fontFamily, (k) => `--font-${k}`),
+    ...entries(modernFont, (k) => `--font-${k}`),
     ...fontSizeEntries(),
-    ...entries(fontWeight, (k) => `--font-weight-${k}`),
+    ...entries({ ...fontWeight, ...modernFontWeight }, (k) => `--font-weight-${k}`),
     ...entries(letterSpacing, (k) => `--tracking-${k}`),
     ...entries(lineHeight, (k) => `--leading-${k}`),
     '',
-    section('radii — multiples of --radius, declared in :root below'),
-    ...entries(radiusCss, (k) => `--radius-${k}`),
+    section('radii — the modern theme sets each length; full stays a circle'),
+    ...entries({ ...modernRadius, full: radius.full }, (k) => `--radius-${k}`),
     '',
     section('bevels — box shadows, each read from --rk-shadow-* so a theme can change it'),
     ...Object.keys(shadow).map((k) => `  --shadow-${k}: var(--rk-shadow-${k});`),
@@ -98,21 +108,25 @@ export function buildThemeCss(): string {
     `  --radius: ${radiusBase};`,
     '}',
     '',
-    "/* The values behind the shadow tokens, and the style switches. Windows 98's. */",
+    '/* Shadows and style switches. The modern theme; a consumer theme replaces them. */',
     ':root {',
-    ...entries(shadow, (k) => `--rk-shadow-${k}`),
-    ...entries(style, (k) => `--rk-${k}`),
+    ...entries(modernLightShadow, (k) => `--rk-shadow-${k}`),
+    ...entries(modernStyle, (k) => `--rk-${k}`),
     '}',
     '',
-    '/* The modern palette. Only the modern theme references it. */',
+    '/* The modern palette, which the semantic colours reference. */',
     ':root {',
     ...entries(modernPalette, (k) => `--color-modern-${k}`),
     '}',
     '',
-    '/* Windows 98 inside a page in another theme. */',
-    themeRule('[data-theme="win98"]', 'light', win98Vars),
+    '/* Dark, on the page itself: the system, unless data-color-scheme fixes it. */',
+    '@media (prefers-color-scheme: dark) {',
+    indent(themeRule(':root:not([data-color-scheme="light"])', 'dark', modernDarkVars)),
+    '}',
     '',
-    '/* The modern theme. */',
+    themeRule(':root[data-color-scheme="dark"]', 'dark', modernDarkVars),
+    '',
+    '/* The same theme again, so a modern region can sit inside a theme of your own. */',
     themeRule('[data-theme="modern"]', 'light', modernLightVars),
     '',
     '@media (prefers-color-scheme: dark) {',
@@ -159,7 +173,8 @@ function entries(scale: Record<string, string>, toVar: (key: string) => string):
  * supplies the leading that ships with `text-sm`.
  */
 function fontSizeEntries(): string[] {
-  return Object.entries(fontSize).flatMap(([key, value]) => [
+  const scale = { ...fontSize, ...modernFontSize }
+  return Object.entries(scale).flatMap(([key, value]) => [
     `  --text-${key}: ${value.size};`,
     `  --text-${key}--line-height: ${value.lineHeight};`,
   ])

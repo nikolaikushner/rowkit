@@ -77,6 +77,15 @@ import {
   checkboxVariants,
 } from '../components/Checkbox/Checkbox.variants'
 import {
+  switchInputClass,
+  switchLabelVariants,
+  switchThumbVariants,
+  switchTrackFocusClass,
+  switchTrackOuterFocusClass,
+  switchTrackVariants,
+  switchVariants,
+} from '../components/Switch/Switch.variants'
+import {
   radioLabelVariants,
   radioMarkVariants,
   radioVariants,
@@ -229,6 +238,13 @@ const components: readonly (readonly [string, CvaFn])[] = [
   ['Window button', windowButtonVariants],
   ['Window body', windowBodyVariants],
   ['Checkbox', checkboxVariants],
+  ['Switch', switchVariants],
+  ['Switch track', switchTrackVariants],
+  ['Switch thumb', switchThumbVariants],
+  ['Switch label', switchLabelVariants],
+  ['Switch input', () => switchInputClass],
+  ['Switch track focus', () => switchTrackFocusClass],
+  ['Switch track outer focus', () => switchTrackOuterFocusClass],
   ['Checkbox box', checkboxBoxVariants],
   ['Checkbox label', checkboxLabelVariants],
   ['Radio', radioVariants],

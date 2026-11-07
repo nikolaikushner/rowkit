@@ -45,7 +45,7 @@ const FEATURES: { icon: SiteIconName; title: string; text: string }[] = [
 const STATS = [
   { value: '21', text: 'components, more on the way' },
   { value: '1,494', text: 'tests: unit, component and in a real browser' },
-  { value: '39 kB', text: 'the whole library, brotli; a Button alone 2.6 kB' },
+  { value: '40 kB', text: 'the whole library, brotli; a Button alone 2.6 kB' },
   { value: '2 + yours', text: 'themes in the box, and any you define' },
 ]
 </script>

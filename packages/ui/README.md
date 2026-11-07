@@ -9,13 +9,6 @@ No behaviour library underneath — focus, dismissal and positioning are rowkit'
 
 **[Documentation](https://rowkit.dev)** · **[Storybook](https://storybook.rowkit.dev)** · **[GitHub](https://github.com/NikolaiKushner/rowkit)**
 
-<p align="center">
-  <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/NikolaiKushner/rowkit/main/docs/public/readme/hero-dark.png" />
-    <img src="https://raw.githubusercontent.com/NikolaiKushner/rowkit/main/docs/public/readme/hero.png" alt="rowkit — the same Users table in Windows 98, modern light, modern dark and a theme of your own, under the rowkit logo" width="100%" />
-  </picture>
-</p>
-
 ## Install
 
 ```bash
@@ -77,13 +70,13 @@ The table reports the sort and renders what it is handed — it never reorders i
 
 ## Themes
 
-Two themes from one set of components: **Windows 98**, the default, and **modern**, in light and dark. A theme is token values and nothing else — the same components, the same props, the same markup, one attribute apart.
+One theme, light and dark. A theme is token values and nothing else — the same components, the same props, the same markup.
 
 ```html
-<html data-theme="modern" data-color-scheme="dark"></html>
+<html data-color-scheme="dark"></html>
 ```
 
-`data-theme` works on any element, and themes nest. Without `data-color-scheme` the modern theme follows the system's light or dark setting. Every colour, size, corner, shadow and state is a token, so the look is yours to change — adjust a few variables, or define a complete theme of your own, light and dark, in one call:
+Without `data-color-scheme` the page follows the system's light or dark setting. `data-theme` works on any element, and a theme of your own nests inside it. Every colour, size, corner, shadow and state is a token, so the look is yours to change — adjust a few variables, or define a complete theme of your own, light and dark, in one call:
 
 ```ts
 import { defineTheme } from 'rowkit/theme'
@@ -111,7 +104,7 @@ How it works, every value you can change, and a live builder: [Themes](https://r
 - **Forms:** `Field` · `Input` · `Select` · `Checkbox` · `Radio` · `Badge`
 - **Data:** `DataTable` · `Pagination` · `FilterBar` · `EmptyState` · `Skeleton`
 - **Overlays:** `Dialog` · `Toast` · `Tooltip`
-- **Icons:** the Windows 98 pixel set, 42 icons at 8, 16 and 32px. The modern theme draws its own outline glyph over each one.
+- **Icons:** outline glyphs at 8, 16 and 32px.
 
 That is what is published today. Menus, dates, sheets, a command palette and the rest of a product interface are not in this release yet — they are the plan in the [roadmap](https://github.com/NikolaiKushner/rowkit/blob/main/ROADMAP.md), built to the same standard before they ship.
 
@@ -127,4 +120,4 @@ That is what is published today. Menus, dates, sheets, a command palette and the
 
 MIT © Nikolai Kushner
 
-The Windows 98 theme is rowkit's own drawing of the Windows 98 interface, from its Figma file. rowkit is not affiliated with Microsoft and ships no Microsoft artwork — no Windows flag, no logos.
+rowkit is not affiliated with Microsoft and ships no Microsoft artwork.

@@ -3,7 +3,7 @@
 [![npm](https://img.shields.io/npm/v/@rowkit/tokens/beta?color=D63A1F)](https://www.npmjs.com/package/@rowkit/tokens)
 [![license](https://img.shields.io/npm/l/@rowkit/tokens)](https://github.com/NikolaiKushner/rowkit/blob/main/LICENSE)
 
-The design tokens behind [rowkit](https://www.npmjs.com/package/rowkit) — colour, shadows, sizes, corners, type, layers and motion for its two themes: **Windows 98**, the default, and **modern**, in light and dark. Plus `defineTheme()`, to make a theme of your own (with rowkit installed, import it from `rowkit/theme` — the same function, matched to the components).
+The design tokens behind [rowkit](https://www.npmjs.com/package/rowkit) — colour, shadows, sizes, corners, type, layers and motion for its theme, in light and dark. Plus `defineTheme()`, to make a theme of your own (with rowkit installed, import it from `rowkit/theme` — the same function, matched to the components).
 
 Usable on its own. Nothing here depends on Vue, so a chart library, a design tool or an email template can read the same values the components use.
 
@@ -30,13 +30,13 @@ As a Tailwind v4 theme:
 @import '@rowkit/tokens/css';
 ```
 
-Every token becomes a theme value, so `bg-card`, `text-ui`, `p-4` and `shadow-raised` resolve to the scales above. The stylesheet also carries both themes. Pick one with an attribute on any element; themes nest:
+Every token becomes a theme value, so `bg-card`, `text-ui`, `p-4` and `shadow-raised` resolve to the scales above. The stylesheet is the shipped theme. Dark follows the system, or an attribute; a theme of your own nests:
 
 ```html
-<html data-theme="modern" data-color-scheme="dark"></html>
+<html data-color-scheme="dark"></html>
 ```
 
-Without `data-theme` a page is Windows 98. Without `data-color-scheme` the modern theme follows the system's light or dark setting.
+Without `data-color-scheme` the page follows the system's light or dark setting. `data-theme="win98"` does not select a theme.
 
 As CSS custom properties, for anything Tailwind does not cover:
 
@@ -57,7 +57,7 @@ tokens.color.vga.silver // '#c0c0c0' — the face of every window
 const series = [tokens.color.vga.navy, tokens.color.vga.green, tokens.color.vga.maroon]
 ```
 
-`tokens` is grouped by scale rather than flattened, so `tokens.color.vga.navy` narrows to its literal type and autocompletes at every level. The scales are Windows 98's values.
+`tokens` is grouped by scale rather than flattened, so `tokens.color.vga.navy` narrows to its literal type and autocompletes at every level.
 
 ## Themes as data
 
@@ -66,14 +66,13 @@ const series = [tokens.color.vga.navy, tokens.color.vga.green, tokens.color.vga.
 ```ts
 import { tokens } from '@rowkit/tokens'
 
-tokens.themes.win98['--spacing-control-md'] // '28px'
 tokens.themes.modern.light['--spacing-control-md'] // '32px'
 tokens.themes.modern.dark // only what the dark scheme changes
 ```
 
 ## A theme of your own
 
-`defineTheme()` starts from `modern` (the default) or `win98`, lays your values over it and returns the stylesheet — every variable declared, and for a theme with a dark scheme, the dark rules too, following the system unless `data-color-scheme` fixes it. A token name rowkit does not have throws, so a typo fails the build.
+`defineTheme()` starts from `modern`, lays your values over it and returns the stylesheet — every variable declared, and the dark rules too, following the system unless `data-color-scheme` fixes it. `extends: 'win98'` throws. A token name rowkit does not have throws, so a typo fails the build.
 
 ```ts
 import { defineTheme } from '@rowkit/tokens'
@@ -91,14 +90,14 @@ Write the string to a file imported after `rowkit/styles`, or into a `<style>` e
 ```ts
 import { themeRule, tokens } from '@rowkit/tokens'
 
-themeRule('.print', 'light', { ...tokens.themes.win98, '--color-background': '#ffffff' })
+themeRule('.print', 'light', { ...tokens.themes.modern.light, '--color-background': '#ffffff' })
 ```
 
 The whole guide, with a live builder: [Themes](https://rowkit.dev/foundations/themes).
 
 ## Reference
 
-`@rowkit/tokens/reference` describes every token a theme sets: what it is for, which components read it, and its value in Windows 98 and in modern light and dark. A separate entry point, so the main one stays small.
+`@rowkit/tokens/reference` describes every token a theme sets: what it is for, which components read it, and its value in light and in dark. A separate entry point, so the main one stays small.
 
 ```ts
 import { tokenReference } from '@rowkit/tokens/reference'
@@ -109,15 +108,15 @@ tokenReference.find((t) => t.name === '--color-control-primary')
 
 ## Notes on the values
 
-**Windows 98's colour is the exact Windows 98 palette.** Primitives are `#rrggbb` values from the VGA palette and the default Windows 98 scheme, named as in the design's Figma variables. The modern palette follows the designer's Figma file.
+**The palette follows the designer's Figma file.** Semantic colours point at `--color-modern-*`. The VGA names remain available as primitives.
 
-**Depth: bevels in Windows 98, soft shadows in modern.** In Windows 98, `shadow-raised`, `shadow-sunken`, `shadow-window` and the rest are hard inset lines in the four `bevel-*` colours. The modern theme sets the same names to soft shadows outside the box and hairline edges.
+**Depth is a soft shadow and a hairline.** `shadow-raised`, `shadow-sunken`, `shadow-window` and the rest sit outside the box.
 
-**Corners: square in Windows 98, rounded in modern.** In Windows 98 the radius scale multiplies `--radius`, which is `0rem` until you set it. The modern theme sets each step as a length: 7px for a button or a field, 12px for a window.
+**Corners are lengths.** 7px for a button or a field, 12px for a window.
 
-**Type: PT Sans and VT323 in Windows 98, the system's faces in modern.** Both set the interface at 13px (`text-ui`) — in Windows 98, its 8pt at Large Fonts. Windows 98 has two weights, regular and bold; modern's emphasis (`--font-weight-strong`) is semibold. The font files are not shipped: for Windows 98, load `@fontsource/pt-sans` and `@fontsource/vt323` in the app. The modern theme loads nothing.
+**Type is the system face.** The interface is 13px (`text-ui`). Emphasis (`--font-weight-strong`) is semibold. The theme loads no font files.
 
-**Motion: next to none in Windows 98, short in modern.** Windows 98 changes state at once; the modern theme uses transitions of 120–160ms.
+**Motion is short.** State changes use transitions of 120–160ms.
 
 **Contrast is asserted, not claimed.** Every semantic text pairing is checked against WCAG AA, and every control boundary and focus ring against 3:1, in every theme and scheme, in the package's own tests.
 
@@ -129,4 +128,4 @@ tokenReference.find((t) => t.name === '--color-control-primary')
 
 MIT © Nikolai Kushner
 
-The Windows 98 theme is a tribute to Windows 98. rowkit is not affiliated with or endorsed by Microsoft.
+rowkit is not affiliated with or endorsed by Microsoft.

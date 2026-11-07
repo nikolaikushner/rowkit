@@ -374,16 +374,15 @@ export const KeyboardOnly: Story = {
 }
 
 /**
- * Tabbing to the trigger draws the dotted focus rectangle. A trigger that lost
- * it looks identical at rest and is unusable by keyboard.
+ * Tabbing to the trigger draws the focus ring. A trigger that lost it looks
+ * identical at rest and is unusable by keyboard.
  */
 export const FocusRingIsVisible: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement)
     const trigger = canvas.getByRole('combobox')
 
-    // The Windows 98 focus rectangle: a dotted outline drawn on the input
-    // itself, inset into its 1px padding. Measured, because a variant that
+    // At rest the trigger has no outline. Measured, because a variant that
     // failed to compile would leave the class list right and the ring absent.
     await expect(getComputedStyle(trigger).outlineStyle).toBe('none')
 
@@ -392,13 +391,12 @@ export const FocusRingIsVisible: Story = {
     await userEvent.tab()
     await expect(trigger).toHaveFocus()
 
-    // Windows 98 rings the text, dotted; a theme that rings the control
-    // (`--rk-focus-outer-width`) rings the frame around it instead.
+    // The ring sits on the frame when `--rk-focus-outer-width` is set, and on
+    // the trigger itself when that width is 0.
     const frame = trigger.closest<HTMLElement>('[data-slot="select-trigger"]') ?? trigger
     const ringed = px('--rk-focus-outer-width') > 0 ? frame : trigger
     const focused = getComputedStyle(ringed)
     await expect(focused.outlineStyle).not.toBe('none')
     await expect(Number.parseFloat(focused.outlineWidth)).toBeGreaterThan(0)
-    if (ringed === trigger) await expect(focused.outlineStyle).toBe('dotted')
   },
 }

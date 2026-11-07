@@ -1,35 +1,27 @@
 # Themes
 
-rowkit ships two themes: **Windows 98**, the default, and **modern**, the look of
-a current desktop operating system in light and dark. A theme is a set of
-values for rowkit's tokens and nothing else. The components are the same;
-their props, their markup and their behaviour do not change with the theme.
+rowkit ships one theme: the look of a current desktop operating system, in
+light and dark. A theme is a set of values for rowkit's tokens and nothing
+else. The components do not change with it — only the values do.
 
 ## Side by side
 
-The same form, the same props, the same markup. Only `data-theme` changes.
+The same form, the same props, the same markup. Only `data-color-scheme` changes.
 
 <ThemesSideBySide />
 
 ## Switching
 
-Put `data-theme` on any element — usually `<html>`. Without one, a page is
-Windows 98.
+Without an attribute, a page is the light scheme. Dark follows the system.
+Fix it with `data-color-scheme` on `<html>`:
 
 ```html
-<html data-theme="modern"></html>
+<html data-color-scheme="dark"></html>
 ```
 
-The modern theme follows the system's light or dark setting. Fix it with
-`data-color-scheme` on the same element:
-
-```html
-<html data-theme="modern" data-color-scheme="dark"></html>
-```
-
-Themes nest. Every theme declares all of its values on its own element, so a
-region marked `data-theme="win98"` inside a modern page is Windows 98, overlays
-included when they are teleported inside it.
+`data-theme="modern"` declares the same values again, so a modern region can
+sit inside a theme of your own. Themes nest: every theme declares all of its
+values on its own element, overlays included when they are teleported inside it.
 
 ### Without a flash on load
 
@@ -49,7 +41,7 @@ inline script in `<head>`, ahead of the stylesheet:
 
 The look is yours to change: colour, corners, density, typeface, shadows, how
 focus and a pressed button are drawn, even the icons. Nothing about a theme is
-reserved to rowkit — Windows 98 and modern are built with exactly the tools
+reserved to rowkit — the shipped theme is built with exactly the tools
 below. There are three ways in, from smallest to largest:
 
 | Way                                             | Good for                                                              | What you write           |
@@ -70,7 +62,7 @@ same CSS an app would ship — and the code under it is that theme.
 
 ### Adjust a theme
 
-Most rebrands are a handful of values on top of one of the two themes. Set
+Most rebrands are a handful of values on top of the shipped theme. Set
 them on the theme's own selector, in a stylesheet loaded after `rowkit/styles`:
 
 ```css
@@ -91,13 +83,11 @@ them on the theme's own selector, in a stylesheet loaded after `rowkit/styles`:
 }
 ```
 
-- **Windows 98 is the default, so it has two selectors.** Adjust it with
-  `:root, [data-theme='win98'] { … }`.
-- **The modern theme's dark scheme has its own rules.** A value the dark scheme
-  also sets (the focus ring, the link colour, surfaces, text) needs repeating
-  under `[data-theme='modern'][data-color-scheme='dark']` and the
-  `prefers-color-scheme: dark` query. Once that is more than a line or two,
-  define a theme instead: it writes those rules for you.
+- **The dark scheme has its own rules.** A value the dark scheme also sets
+  (the focus ring, the link colour, surfaces, text) needs repeating under
+  `:root:not([data-color-scheme='light'])` and `[data-color-scheme='dark']`.
+  Once that is more than a line or two, define a theme instead: it writes
+  those rules for you.
 - **Use the theme's selector, not `:root`.** A variable whose value uses `var()`
   is resolved where it is declared. A theme declares its values on its own
   element, so a value set only on `:root` never reaches a `data-theme` region.
@@ -108,7 +98,7 @@ them on the theme's own selector, in a stylesheet loaded after `rowkit/styles`:
 ### Define your own theme
 
 `defineTheme()` from `rowkit/theme` turns a few values into a complete theme:
-it starts from Windows 98 or modern, lays your values over it, and writes the
+it starts from the shipped theme, lays your values over it, and writes the
 stylesheet — every variable declared, both schemes, the dark one following the
 system unless the page fixes it.
 
@@ -138,12 +128,12 @@ export const acme = defineTheme({
 })
 ```
 
-| Option    | What it does                                                                                                                                                                                     |
-| --------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `name`    | The theme's name: the page switches to it with `data-theme="acme"`. Lowercase letters, digits and dashes.                                                                                        |
-| `extends` | `'modern'` (default) or `'win98'`. Every value you do not set comes from it — including its style: rings or dotted rectangles, bevels or shadows.                                                |
-| `light`   | Your values for the light scheme, or for the only scheme of a theme without a dark one.                                                                                                          |
-| `dark`    | What changes in the dark scheme, on top of `light`. A theme built on `modern` inherits modern's dark scheme; `dark: false` gives it none. A theme built on `win98` has none unless you pass one. |
+| Option    | What it does                                                                                                               |
+| --------- | -------------------------------------------------------------------------------------------------------------------------- |
+| `name`    | The theme's name: the page switches to it with `data-theme="acme"`. Lowercase letters, digits and dashes.                  |
+| `extends` | `'modern'`. Every value you do not set comes from the shipped theme. `'win98'` throws: that theme is not shipped.          |
+| `light`   | Your values for the light scheme, or for the only scheme of a theme without a dark one.                                    |
+| `dark`    | What changes in the dark scheme, on top of `light`. A theme inherits the shipped dark scheme; `dark: false` gives it none. |
 
 It checks what it is given. Token names are typed, so an editor completes them
 and underlines a typo (`'--color-brnad'`); at run time an unknown token throws,
@@ -213,7 +203,7 @@ remembers the choice:
 // useTheme.ts
 import { ref, watchEffect } from 'vue'
 
-type Theme = 'win98' | 'modern' | 'acme'
+type Theme = 'modern' | 'acme'
 type Scheme = 'system' | 'light' | 'dark'
 
 const theme = ref<Theme>((localStorage.getItem('theme') as Theme | null) ?? 'modern')
@@ -266,13 +256,13 @@ variable. Start from the rule for the theme closest to yours — copy
 Declare every variable, not only the ones you change: a variable left out
 inherits from whatever theme surrounds the region, which is not what you want
 from a theme. The same values are available as data —
-`tokens.themes.win98`, `tokens.themes.modern.light` and `.dark` — if you would
+`tokens.themes.modern.light` and `.dark` — if you would
 rather generate the rule yourself; `themeRule(selector, scheme, values)` writes
 one.
 
 ## What you can change
 
-Every value a component draws with, in six groups. Values for both themes are on
+Every value a component draws with, in six groups. The values are on
 [Tokens](/foundations/tokens).
 
 | Group          | Variables              | Examples                                                                                                                                                                                                                                           |
@@ -291,15 +281,12 @@ is a plain CSS value:
 
 ### Icons
 
-rowkit's icons are Windows 98 pixel art, and every one is an `<svg data-icon>`.
-A theme does not swap the components to change them: it hides the pixels and
-paints a glyph over the same box with a CSS mask.
+rowkit's icons are outline glyphs, and every one is an `<svg data-icon>`.
+A theme paints the glyph with a CSS mask.
 
-- **Keep the pixel icons:** `--rk-icon-pixels: inline; --rk-icon-fill: transparent`
-  (what Windows 98 sets).
 - **Use the outline glyphs:** `--rk-icon-pixels: none; --rk-icon-fill: currentColor`,
   and `--rk-icon-tone-danger`, `-warning`, `-info`, `-success`, `-folder` for the
-  ones that keep a colour (what modern sets — a theme extending modern has it).
+  ones that keep a colour (what the shipped theme sets).
 - **Draw your own:** set `--rk-icon-<name>` on your theme's selector to an SVG
   `url()`; the names are the icons' `data-icon` values, such as `search`,
   `error-32` or `check-glyph`. The SVG is used as a mask: its shape counts, not

@@ -27,7 +27,7 @@ import { shadow, textShadow } from './shadow'
 import { size } from './size'
 import { spacing, spacingBase } from './spacing'
 import { style } from './style'
-import { modernDarkVars, modernLightVars, win98Vars } from './themes'
+import { modernDarkVars, modernLightVars } from './themes'
 import { fontFamily, fontSize, fontWeight, letterSpacing, lineHeight } from './typography'
 import { zIndex } from './z-index'
 
@@ -125,9 +125,8 @@ export const tokens = {
     duration,
     easing,
   },
-  /** Each theme as the variables it declares. */
+  /** The theme rowkit ships, as the variables it declares. */
   themes: {
-    win98: win98Vars,
     modern: { light: modernLightVars, dark: modernDarkVars },
   },
 } as const

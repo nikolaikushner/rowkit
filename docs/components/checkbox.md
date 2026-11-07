@@ -103,7 +103,7 @@ blue ring around the box rather than around the label.
 
 - **For one choice out of several.** That is a set of `Radio`s.
 - **For a setting that applies at once.** A check box reads as "decided on
-  submit"; an instant switch needs an action the user sees happen.
+  submit". A setting that takes effect as it is flipped is a `Switch`.
 
 ## Props
 

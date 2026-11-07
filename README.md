@@ -1,18 +1,5 @@
 # rowkit
 
-<!--
-  Absolute URLs on purpose. npm does not resolve relative image paths against the
-  repository, so a relative one renders here and shows nothing on the package
-  page — which is the surface these images exist for.
--->
-
-<p align="center">
-  <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/NikolaiKushner/rowkit/main/docs/public/readme/hero-dark.png" />
-    <img src="https://raw.githubusercontent.com/NikolaiKushner/rowkit/main/docs/public/readme/hero.png" alt="rowkit — the same Users table in Windows 98, modern light, modern dark and a theme of your own, under the rowkit logo" width="100%" />
-  </picture>
-</p>
-
 <p align="center">
   <a href="https://www.npmjs.com/package/rowkit"><img src="https://img.shields.io/npm/v/rowkit/beta?color=D63A1F" alt="npm" /></a>
   <a href="./LICENSE"><img src="https://img.shields.io/npm/l/rowkit" alt="license" /></a>
@@ -27,19 +14,15 @@ A professional Vue 3 toolkit — the components a product interface is built fro
 
 A product interface is a set of components that have to agree: controls, overlays, tables, filters, empty and loading states. rowkit is that set, built as one toolkit — typed, with its own behaviour layer, from one token package. What is published today is the part already finished. The rest of the set is the plan in the [roadmap](./ROADMAP.md), not a second library to go and find.
 
-![DataTable side by side in Windows 98 and the modern theme: the live demo on rowkit.dev — a toolbar, a FilterBar with one chip, a sorted table with a selected row and status badges, and Pagination in the status bar](https://raw.githubusercontent.com/NikolaiKushner/rowkit/main/docs/public/readme/datatable.png)
-
 ## What it looks like
 
-rowkit ships two themes from one set of components: **Windows 98**, the default, and **modern**, in light and dark. A theme is token values and nothing else — the same table, the same markup, one attribute apart.
-
-![The rowkit.dev desktop switching from Windows 98 to the modern theme, light and then dark: the same Users table, About window and install command in each](https://raw.githubusercontent.com/NikolaiKushner/rowkit/main/docs/public/readme/themes.gif)
+One theme, light and dark. A theme is token values and nothing else — the same components, the same markup. Without an attribute the page is the light scheme; dark follows the system or `data-color-scheme`.
 
 ```html
-<html data-theme="modern" data-color-scheme="dark">
+<html data-color-scheme="dark">
 ```
 
-Every colour, size, corner, shadow and state is a token — the bevels and the dotted focus ring of Windows 98 included — so the look is yours to change. Adjust a few variables for your brand, or define a complete theme of your own, light and dark, in one call:
+Every colour, size, corner, shadow and state is a token, so the look is yours to change. Adjust a few variables for your brand, or define a complete theme of your own, light and dark, in one call:
 
 ```ts
 import { defineTheme } from 'rowkit/theme'
@@ -53,11 +36,7 @@ export const acme = defineTheme({
 
 How it works, every value you can change, and a live builder: [Themes](https://rowkit.dev/foundations/themes).
 
-![The same components in Windows 98 and the modern theme: buttons and a button group, inputs and a select, badges, checkboxes and radios, pagination with a progress bar and a status bar, and a field with an error](https://raw.githubusercontent.com/NikolaiKushner/rowkit/main/docs/public/readme/components.png)
-
-The docs at [rowkit.dev](https://rowkit.dev) switch with it: in Windows 98 every page opens in an Explorer window, folder tree on the left; in the modern theme the site is a modern desktop, with a menu bar, a Dock and Finder-style windows. It opens in the modern theme; [`?theme=win98`](https://rowkit.dev/?theme=win98) opens it in Windows 98.
-
-![rowkit.dev in Windows 98 and the modern theme: the DataTable page with the folder tree and a live example, as an Explorer window and as a Finder window](https://raw.githubusercontent.com/NikolaiKushner/rowkit/main/docs/public/readme/docs.png)
+The docs are at [rowkit.dev](https://rowkit.dev).
 
 ## Install
 
@@ -153,4 +132,4 @@ pnpm docs:dev     # documentation site
 
 MIT © Nikolai Kushner
 
-The look is rowkit's own drawing of the Windows 98 interface, from its Figma file. rowkit is not affiliated with Microsoft and ships no Microsoft artwork — no Windows flag, no logos.
+rowkit is not affiliated with Microsoft and ships no Microsoft artwork.

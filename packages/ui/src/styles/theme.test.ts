@@ -120,34 +120,20 @@ describe('the focus ring compiles', () => {
 
 describe('the radius scale resolves', () => {
   /*
-   * Every radius is `calc(var(--radius) * f)`. Tailwind emits only the theme
-   * variables its generated utilities reference, and no utility is generated
-   * from a bare `--radius` — so if it lived inside `@theme` it could be dropped
-   * from the output while every `rounded-*` rule still looked perfectly correct.
-   *
-   * A `calc()` over an undefined variable is not a CSS error. `border-radius`
-   * computes to nothing and every corner in the library goes square, silently.
-   * That is why `--radius` is declared in its own `:root` block, and why this
-   * asserts on the compiled stylesheet rather than on the token object.
+   * The shipped theme sets each corner as a length. Tailwind emits only the
+   * theme variables its generated utilities reference, so a missing `--radius-*`
+   * compiles to no corner and every control goes square, silently.
    */
-  it('declares --radius, so the calc() has something to multiply', async () => {
-    const css = await build('rounded-md')
-    expect(css, '--radius vanished — every rounded-* utility now computes to 0').toMatch(
-      /--radius:\s*0rem/
-    )
-  })
-
   it.each([
-    ['rounded-xs', 0.4],
-    ['rounded-sm', 0.6],
-    ['rounded-md', 0.8],
-    ['rounded-xl', 1.4],
-  ])('%s multiplies --radius by %d', async (utility, factor) => {
-    expect(await build(utility)).toContain(`calc(var(--radius) * ${factor})`)
-  })
-
-  it('leaves rounded-lg as the base, unmultiplied', async () => {
-    expect(await build('rounded-lg')).toMatch(/--radius-lg:\s*var\(--radius\)/)
+    ['rounded-xs', '4px'],
+    ['rounded-sm', '5px'],
+    ['rounded-md', '7px'],
+    ['rounded-lg', '10px'],
+    ['rounded-xl', '12px'],
+  ])('%s is %s', async (utility, length) => {
+    const css = await build(utility)
+    expect(css, `${utility} generated no rule`).toContain(`.${utility} {`)
+    expect(css).toContain(length)
   })
 })
 
@@ -188,12 +174,11 @@ describe('shadows', () => {
   it('draws the sticky header rule as an inset shadow that keeps its token', async () => {
     // A border cannot do this job: under `border-collapse` it belongs to the
     // table grid, so a sticky header scrolls away from its own rule. The value
-    // has to survive Tailwind's shadow-colour handling with the var() intact,
-    // or the line stops following the border token.
+    // has to survive Tailwind's shadow-colour handling with the var() intact.
     const css = await build('shadow-sticky-header')
     expect(css, 'shadow-sticky-header generated no rule').toContain('.shadow-sticky-header {')
     expect(css).toContain('inset')
-    expect(css).toContain('var(--color-border)')
+    expect(css).toContain('var(--color-modern-gray-300)')
   })
 
   it.each([
@@ -218,10 +203,10 @@ describe('shadows', () => {
     expect(css).toContain('--tw-shadow: var(--rk-shadow-raised)')
   })
 
-  it('declares the Windows 98 bevel from hard inset lines in the bevel colours', async () => {
+  it('declares the raised shadow from the theme variable, a soft edge in the modern theme', async () => {
     const css = await build('shadow-raised')
-    expect(css).toMatch(/--rk-shadow-raised: inset -1px -1px var\(--color-bevel-dark\)/)
-    expect(css).toContain('inset 2px 2px var(--color-bevel-light)')
+    expect(css).toContain('--rk-shadow-raised: 0 0 0 1px var(--color-modern-ink-12)')
+    expect(css).not.toContain('[data-theme="win98"]')
   })
 })
 
@@ -231,7 +216,7 @@ describe('themes', () => {
     const css = await build('bg-card')
     expect(css).not.toContain('.dark')
     expect(css).toContain('[data-theme="modern"] {')
-    expect(css).toContain('[data-theme="win98"] {')
+    expect(css).not.toContain('[data-theme="win98"]')
   })
 
   it('carry the modern icon glyphs, which draw only where a theme gives them a fill', async () => {

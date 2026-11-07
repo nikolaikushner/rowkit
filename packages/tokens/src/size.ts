@@ -53,9 +53,21 @@ export const size = {
   /** The side of a checkbox's box, and of an option button. */
   check: '13px',
   radio: '12px',
-  /** Between a check box or option button and its label, and the label's own inset (where the dotted ring sits). */
+  /** Between a check box, option button or switch and its label, and the label's own inset (where the dotted ring sits). */
   'check-gap': '4px',
   'check-label-px': '1px',
+
+  /** A switch's track: height, width, the thumb, the gap around the thumb, and how far the thumb travels. */
+  'switch-h': '14px',
+  'switch-w': '26px',
+  'switch-thumb': '10px',
+  'switch-inset': '2px',
+  /**
+   * How far the thumb moves when the switch turns on.
+   * Width, minus the thumb, minus the inset on both sides — kept as its own
+   * length so the thumb can travel by a transform and stay on whole pixels.
+   */
+  'switch-travel': '12px',
 
   /** A window's or a dialog's title bar. */
   titlebar: '22px',

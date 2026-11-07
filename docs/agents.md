@@ -609,6 +609,28 @@ handling.
 
 - `#default` — A short line of text, an icon and text, or a small control.
 
+### Switch
+
+`import { Switch } from 'rowkit'`
+
+**Props**
+
+- `label: string`. The label beside the switch. The default slot replaces it.
+- `disabled: boolean` — default `false`. Disables the control: a grey track and thumb, and an embossed label.
+- `name: string`. Name submitted with a native form.
+- `value: string`. Value submitted with a native form while on.
+- `required: boolean` — default `false`. Marks the control required for native form validation.
+- `id: string`. Id for the input. Generated when omitted.
+- `class: string`. Additional classes for the row, merged so a consumer's utility wins.
+
+**v-model**
+
+- `v-model` — `boolean`. Whether the switch is on.
+
+**Slots**
+
+- `#default` — The label, for one that needs markup. Replaces `label`.
+
 ### Toaster
 
 `import { Toaster } from 'rowkit'`
