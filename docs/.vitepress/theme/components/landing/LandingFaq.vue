@@ -23,7 +23,7 @@ const QUESTIONS = [
   },
   {
     q: 'How big is it?',
-    a: '39 kB brotli for everything. Import one component and you ship only that — a Button is 2.6 kB.',
+    a: '40 kB brotli for everything. Import one component and you ship only that — a Button is 2.6 kB.',
   },
   {
     q: 'Which theme do I get by default?',
