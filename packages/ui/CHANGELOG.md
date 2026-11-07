@@ -1,5 +1,19 @@
 # rowkit
 
+## 1.0.0-beta.3
+
+### Minor Changes
+
+- 4a287be: The Windows 98 theme is no longer shipped. A page with no attribute is the remaining theme, light and dark: dark follows the system, or `data-color-scheme`. `data-theme="win98"` does nothing, and `defineTheme({ extends: 'win98' })` throws. `data-theme="modern"` still redeclares the same values, so a modern region can sit inside a theme of your own.
+- 4a287be: **New: `Switch`**, an on/off control for a setting that takes effect as it is flipped. A native check box with the switch role, so it submits with a form, answers Space, and is announced as a switch. `v-model` is a boolean.
+
+  The track is 20×36, from the `switch-*` tokens. It is not in the Figma file yet. A check box remains the control for a choice decided on submit.
+
+### Patch Changes
+
+- Updated dependencies [4a287be]
+  - @rowkit/tokens@1.0.0-beta.3
+
 ## 1.0.0-beta.2
 
 ### Minor Changes
