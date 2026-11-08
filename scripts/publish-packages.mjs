@@ -101,7 +101,7 @@ try {
       const prerelease = /-([a-z]+)/i.exec(pkg.version)?.[1]
       const tag = prerelease ? ['--tag', prerelease] : []
       console.log(
-        `publishing ${label} from the packed package (oidc ${process.env.ACTIONS_ID_TOKEN_REQUEST_URL ? 'on' : 'off'})`,
+        `publishing ${label} from the packed package (oidc ${process.env.ACTIONS_ID_TOKEN_REQUEST_URL ? 'on' : 'off'})`
       )
       execFileSync('npm', ['publish', '--access', 'public', '--provenance', ...tag], {
         cwd: join(unpacked, 'package'),
